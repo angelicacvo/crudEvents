@@ -95,11 +95,11 @@ npx json-server db.sjon
 
 ## POSTMAN
 coleccion de endopoints
-search all users: http://localhost:3000/users
-search user by id: http://localhost:3000/users/b81b
-search by role: http://localhost:3000/users/?role=admin
-search all events: http://localhost:3000/events
-search by event title: http://localhost:3000/events?title=Jupiter
+- search all users: http://localhost:3000/users
+- search user by id: http://localhost:3000/users/b81b
+- search by role: http://localhost:3000/users/?role=admin
+- search all events: http://localhost:3000/events
+- search by event title: http://localhost:3000/events?title=Jupiter
 
 
 
