@@ -4,6 +4,7 @@
   --violet-hover: #9d4edd;
   --violet-darker: #240046;
   --grey: #f5f1ed;
+  --grey-darker: #eae0d5;
 }
 
 body {
@@ -15,13 +16,19 @@ section {
   margin: 2rem 3rem;
 }
 
+form{
+  background-color: var(--grey-darker);
+  padding: 4rem;
+  border-radius: 10px;
+}
+
 .main_container {
   text-align: center;
 }
 
 .navbar {
   background-color: var(--pastel-violet);
-  padding: 1rem;
+  padding: 1.5rem;
 }
 
 .navbar-text{
@@ -30,24 +37,34 @@ section {
 
 .btn-outline-danger,
 .addEventBtn,
-.btn-primary {
+.btn-primary,
+.btn-outline-primary {
   background-color: var(--violet);
   border: var(--violet);
   color: white;
 }
 
 .btn-outline-danger:hover,
-.addEventBtn:hover, .btn-primary:hover {
+.addEventBtn:hover, .btn-primary:hover,
+.btn-outline-primary:hover {
   background-color: var(--violet-hover);
   border: var(--violet-hover);
 }
 
-.btn-danger, .btn-secondary {
+.btn-danger, .btn-secondary, .btn-outline-secondary {
   background-color: var(--violet-darker);
   border: var(--violet-darker);
+  color: white;
 }
 
-.btn-danger:hover, .btn-secondary:hover {
+.btn-danger:hover, .btn-secondary:hover, .btn-outline-secondary:hover {
   background-color: var(--violet-hover);
   border: var(--violet-hover);
 }
+
+.link{
+  margin: 1rem;
+  color: var(--violet-darker);
+}
+
+

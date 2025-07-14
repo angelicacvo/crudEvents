@@ -64,14 +64,9 @@ export default function registerView() {
               class="form-control"
               aria-describedby="passwordHelpBlock"
             />
-            <div id="passwordHelpBlock" class="form-text">
-              Your password must be 8-20 characters long, contain letters and
-              numbers, and must not contain spaces, special characters, or
-              emoji.
-            </div>
           </div>
             <button id="registerButton" type="button" class="btn btn-primary">Register</button>
-          <a href="#/login" data-link
+            <a class="link" href="#/login" data-link
             >Already have and account? Login</a
           >
         </form>
