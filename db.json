@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "id": "b81b",
+      "fullName": "angelica",
+      "email": "angelica@gmail.com",
+      "username": "angelica",
+      "password": "123",
+      "role": "admin"
+    },
+    {
+      "id": "8566",
+      "fullName": "ange",
+      "email": "ange@gmail.com",
+      "username": "a",
+      "password": "123",
+      "role": "user"
+    }
+  ],
+  "courses": [
+    {
+      "id": "226e",
+      "title": "asas",
+      "description": "fgdfg",
+      "date": "2025-09-07",
+      "capacity": "5",
+      "assistants": [
+        "angelica@gmail.com"
+      ]
+    },
+    {
+      "id": "b7da",
+      "title": "dasdasd",
+      "description": "asasa",
+      "date": "2025-03-05",
+      "capacity": "2",
+      "assistants": [
+        "angelica@gmail.com"
+      ]
+    }
+  ]
+}
