@@ -11,11 +11,11 @@ export async function getUsers() {
     
 }
 
-export async function getCourses() {
+export async function getEvents() {
     try {
-        const res = await fetch("http://localhost:3000/courses");
-        const courses = await res.json();
-        return courses;
+        const res = await fetch("http://localhost:3000/events");
+        const events = await res.json();
+        return events;
     }catch (error){
         console.log(error);
     }

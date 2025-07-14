@@ -1,6 +1,6 @@
 import adminNavbar from "./adminNavbar.js";
 import { protectAdminRoute } from "../../utils/routerGuard.js";
-import { getCourses } from "../../services/js/getData.js";
+import { getEvents } from "../../services/js/getData.js";
 
 export default function adminView() {
   // botón para salir de la sesión
@@ -16,16 +16,16 @@ export default function adminView() {
     }
     if (addButton) {
       addButton.addEventListener("click", () => {
-        addCourse();
+        addEvent();
       });
     }
     if (updateButton) {
       updateButton.addEventListener("click", () => {
-        updateCourse();
+        updateEvent();
       });
     }
   }, 0);
-  courses()
+  events()
   if (!protectAdminRoute()) return "";
   return `
         ${adminNavbar()}
@@ -42,27 +42,27 @@ export default function adminView() {
                 <th scope="col">Actions</th>  
                 </tr>
             </thead>
-            <tbody id="courses-container">
+            <tbody id="events-container">
             </tbody>
           </table>
         </section>
 
 
-        <button type="button" class="btn btn-primary btn-lg position-fixed end-0 bottom-0 m-5 " data-bs-toggle="modal" data-bs-target="#courseModal">
-        Add course
+        <button type="button" class="btn btn-primary btn-lg position-fixed end-0 bottom-0 m-5 " data-bs-toggle="modal" data-bs-target="#eventModal">
+        Add event
         </button>
 
         <div
           class="modal fade"
-          id="courseModal"
+          id="eventModal"
           tabindex="-1"
-          aria-labelledby="courseModalLabel"
+          aria-labelledby="eventModalLabel"
           aria-hidden="true"
         >
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content shadow-lg">
               <div class="modal-header">
-                <h5 class="modal-title" id="courseModalLabel">Create course</h5>
+                <h5 class="modal-title" id="eventModalLabel">Create event</h5>
                 <button
                   type="button"
                   class="btn-close"
@@ -71,21 +71,21 @@ export default function adminView() {
                 ></button>
               </div>
               <div class="modal-body">
-                <form id="newCourseForm">
+                <form id="newEventForm">
                   <div class="mb-3">
-                    <label for="courseTitle" class="form-label text-black"
+                    <label for="eventTitle" class="form-label text-black"
                       >Title</label
                     >
                     <input
                       type="text"
                       class="form-control"
-                      id="courseTitle"
+                      id="eventTitle"
                       required
                     />
                   </div>
                   <div class="mb-3">
                     <label for="capacity" class="form-label text-black"
-                      >Course capacity</label
+                      >Event capacity</label
                     >
                     <input
                       type="number"
@@ -96,7 +96,7 @@ export default function adminView() {
                   </div>
                   <div class="mb-3">
                     <label for="capacity" class="form-label text-black"
-                      >Course date</label
+                      >Event date</label
                     >
                     <input
                       type="date"
@@ -107,13 +107,13 @@ export default function adminView() {
                   </div>
                   <div class="mb-3">
                     <label
-                      for="courseDescription"
+                      for="eventDescription"
                       class="form-label text-black"
                       >Description</label
                     >
                     <textarea
                       class="form-control"
-                      id="courseDescription"
+                      id="eventDescription"
                       rows="3"
                       required
                     ></textarea>
@@ -177,87 +177,87 @@ export default function adminView() {
      `;
 }
 
-async function addCourse() {
+async function addEvent() {
   const capacity = document.getElementById("capacity").value
-  const courseTitle = document.getElementById("courseTitle").value;
-  const courseDescription = document.getElementById("courseDescription").value
+  const eventTitle = document.getElementById("eventTitle").value;
+  const eventDescription = document.getElementById("eventDescription").value
   const date = document.getElementById("date").value.toLocaleString("es-CO");
-  const courses = await getCourses()
+  const events = await getEvents()
 
-  const exists = courses.some(
-    (course) => course.name === courseTitle
+  const exists = events.some(
+    (event) => event.name === eventTitle
   )
 
-  if (!courseTitle || !courseDescription || !date) {
+  if (!eventTitle || !eventDescription || !date) {
     alert("Fill all fields")
   } else if (exists) {
-    alert("This course is already in our database")
+    alert("This event is already in our database")
   } else {
     try {
-      const res = await fetch("http://localhost:3000/courses", {
+      const res = await fetch("http://localhost:3000/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          title: courseTitle,
-          description: courseDescription,
+          title: eventTitle,
+          description: eventDescription,
           date: date,
           capacity: capacity,
           assistants: []
         }),
       });
-      alert("Course created successfully")
+      alert("Event created successfully")
     } catch (error) {
       console.log(error)
     }
   }
 }
 
-async function courses() {
-  const courses = await getCourses();
-  const coursesContainer = document.getElementById("courses-container")
-  courses.forEach(course => {
-    coursesContainer.innerHTML +=
+async function events() {
+  const events = await getEvents();
+  const eventsContainer = document.getElementById("events-container")
+  events.forEach(event => {
+    eventsContainer.innerHTML +=
       `<tr>
-            <td>${course.title}</td>
-            <td>${course.description}</td>
-            <td>${course.capacity}</td>
-            <td>${course.assistants.length}/${course.capacity}</td>
-            <td>${course.date}</td>
-            <td><button class="btn btn-danger mt-2" onclick="deleteCourse('${course.id}')">Delete</button>
-            <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#miModal2" onclick="loadCourse('${course.id}')">Update</button></td>
+            <td>${event.title}</td>
+            <td>${event.description}</td>
+            <td>${event.capacity}</td>
+            <td>${event.assistants.length}/${event.capacity}</td>
+            <td>${event.date}</td>
+            <td><button class="btn btn-danger mt-2" onclick="deleteEvent('${event.id}')">Delete</button>
+            <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#miModal2" onclick="loadEvent('${event.id}')">Update</button></td>
         `
   });
 }
 
-async function deleteCourse(id) {
+async function deleteEvent(id) {
   const confirmDelete = confirm(
-    "Are you sure you want to delete this course?"
+    "Are you sure you want to delete this event?"
   );
   if (!confirmDelete) {
     alert("Operation cancelled");
     return;
   }
   try {
-    const res = await fetch(`http://localhost:3000/courses/${id}`, {
+    const res = await fetch(`http://localhost:3000/events/${id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
 
     if (res.ok) {
-      alert("Course deleted successfully");
+      alert("Event deleted successfully");
     } else {
-      alert("Error cancelling the course");
+      alert("Error cancelling the event");
     }
   } catch (error) {
     console.error(error);
   }
 }
-window.deleteCourse = deleteCourse;
+window.deleteEvent = deleteEvent;
 
-async function loadCourse(id) {
-  const res = await fetch(`http://localhost:3000/courses/${id}`);
+async function loadEvent(id) {
+  const res = await fetch(`http://localhost:3000/events/${id}`);
   const data = await res.json();
 
   document.getElementById("update-id").value = data.id;
@@ -266,23 +266,23 @@ async function loadCourse(id) {
   document.getElementById("update-description").value = data.description;
 }
 
-window.loadCourse = loadCourse;
+window.loadEvent = loadEvent;
 
-async function updateCourse() {
+async function updateEvent() {
   const id = document.getElementById("update-id").value;
   const title = document.getElementById("update-title").value;
   const capacity = document.getElementById("update-afforum").value;
   const description = document.getElementById("update-description").value;
 
-  const res = await fetch(`http://localhost:3000/courses/${id}`, {
+  const res = await fetch(`http://localhost:3000/events/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ title, capacity, description }),
   });
 
   if (res.ok) {
-    alert("Course updated successfully");
+    alert("Event updated successfully");
   } else {
-    alert("Error updating course");
+    alert("Error updating event");
   }
 }

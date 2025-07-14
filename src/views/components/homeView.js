@@ -1,6 +1,6 @@
 import privateNavbar from "./privateNavbar.js";
 import { redirectIfNotLoggedIn } from "../../utils/routerGuard.js";
-import { getCourses } from "../../services/js/getData.js";
+import { getEvents } from "../../services/js/getData.js";
 
 export default function homeView() {
   // botón para salir de la sesión
@@ -13,7 +13,7 @@ export default function homeView() {
       });
     }
   }, 0);
-  courses();
+  events();
   enrolledEvents();
   if (!redirectIfNotLoggedIn()) return "";
   return `
@@ -34,7 +34,7 @@ export default function homeView() {
                 <th scope="col">Actions</th>  
                 </tr>
             </thead>
-            <tbody id="courses-container">
+            <tbody id="events-container">
             </tbody>
         </table>
     </section>
@@ -55,36 +55,36 @@ export default function homeView() {
   `;
 }
 
-async function courses() {
-  const courses = await getCourses();
-  const coursesContainer = document.getElementById("courses-container");
+async function events() {
+  const events = await getEvents();
+  const eventsContainer = document.getElementById("events-container");
   const userData = JSON.parse(sessionStorage.getItem("user"));
   const email = userData.email;
 
-  coursesContainer.innerHTML = "";
+  eventsContainer.innerHTML = "";
 
-  courses.forEach((course) => {
+  events.forEach((event) => {
     let registeredOrNot = "";
-    if (course.assistants.includes(email)) {
+    if (event.assistants.includes(email)) {
       registeredOrNot = "Yes";
-    } else if (!course.assistants.includes(email)) {
+    } else if (!event.assistants.includes(email)) {
       registeredOrNot = "Not";
     }
 
-    coursesContainer.innerHTML += `
+    eventsContainer.innerHTML += `
             <tr>
-            <td>${course.title}</td>
-            <td>${course.description}</td>
-            <td>${course.assistants.length}/${course.capacity}</td>
-            <td>${course.date}</td>
-            <td><button class="btn btn-danger mt-2" onclick="assistCourse('${course.id}', ${course.capacity})">Assist</button></td>
+            <td>${event.title}</td>
+            <td>${event.description}</td>
+            <td>${event.assistants.length}/${event.capacity}</td>
+            <td>${event.date}</td>
+            <td><button class="btn btn-danger mt-2" onclick="assistEvent('${event.id}', ${event.capacity})">Assist</button></td>
             </tr>
         `;
   });
 }
 
-async function assistCourse(id, capacity) {
-  const courses = await getCourses();
+async function assistEvent(id, capacity) {
+  const events = await getEvents();
   const confirmAssistance = confirm("Are you sure you want to assist?");
   if (!confirmAssistance) {
     alert("Operation cancelled");
@@ -92,23 +92,23 @@ async function assistCourse(id, capacity) {
   }
 
   try {
-    const resCourse = await fetch(`http://localhost:3000/courses/${id}`);
-    const course = await resCourse.json();
+    const resEvent = await fetch(`http://localhost:3000/events/${id}`);
+    const event = await resEvent.json();
     const userData = JSON.parse(sessionStorage.getItem("user"));
     const email = userData.email;
-    const registeredAssistants = course.assistants || [];
+    const registeredAssistants = event.assistants || [];
 
     if (registeredAssistants.includes(email)) {
       alert("The user is already registered in this event");
       return;
     }
-    if (registeredAssistants.length >= course.capacity) {
-      alert("There's no more capacity for this course");
+    if (registeredAssistants.length >= event.capacity) {
+      alert("There's no more capacity for this event");
       return;
     }
     const updatedAssistants = [...registeredAssistants, email];
 
-    const res = await fetch(`http://localhost:3000/courses/${id}`, {
+    const res = await fetch(`http://localhost:3000/events/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -128,23 +128,23 @@ async function assistCourse(id, capacity) {
   }
 }
 
-window.assistCourse = assistCourse;
+window.assistEvent = assistEvent;
 
 async function enrolledEvents() {
-  const courses = await getCourses();
+  const events = await getEvents();
   const confirmedEvents = document.getElementById("confirmed-events");
   const userData = JSON.parse(sessionStorage.getItem("user"));
   const email = userData.email;
 
   confirmedEvents.innerHTML = "";
 
-  courses.forEach((course) => {
-    if (course.assistants.includes(email)) {
+  events.forEach((event) => {
+    if (event.assistants.includes(email)) {
       confirmedEvents.innerHTML += `
             <tr>
-            <td>${course.title}</td>
-            <td>${course.description}</td>
-            <td>${course.date}</td>
+            <td>${event.title}</td>
+            <td>${event.description}</td>
+            <td>${event.date}</td>
             </tr>
         `;
     }
