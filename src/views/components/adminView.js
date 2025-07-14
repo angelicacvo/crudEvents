@@ -2,8 +2,11 @@ import adminNavbar from "./adminNavbar.js";
 import { protectAdminRoute } from "../../utils/routerGuard.js";
 import { getEvents } from "../../services/js/getData.js";
 
+// Returns a login form which the user will fill with his data 
+// to send his information to the database
+// Set time out to wait until the DOM loads
+// Includes router guard
 export default function adminView() {
-  // botón para salir de la sesión
   setTimeout(() => {
     const logoutBtn = document.getElementById("logoutBtn");
     const addButton = document.getElementById("addButton")
@@ -48,8 +51,8 @@ export default function adminView() {
         </section>
 
 
-        <button type="button" class="btn btn-primary btn-lg position-fixed end-0 bottom-0 m-5 " data-bs-toggle="modal" data-bs-target="#eventModal">
-        Add event
+        <button type="button" class="btn btn-primary addEventBtn btn-lg position-fixed end-0 bottom-0 m-5 " data-bs-toggle="modal" data-bs-target="#eventModal">
+        Add event <i class="fa-solid fa-plus"></i>
         </button>
 
         <div
@@ -168,8 +171,8 @@ export default function adminView() {
                 </div>
               </div>
               <div class="modal-footer">
-                <button id="updateButton" class="btn btn-primary">Actualizar</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button id="updateButton" class="btn btn-primary">Update</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
               </div>
             </div>
           </div>
@@ -177,6 +180,7 @@ export default function adminView() {
      `;
 }
 
+// method HTTP POST to add a new event 
 async function addEvent() {
   const capacity = document.getElementById("capacity").value
   const eventTitle = document.getElementById("eventTitle").value;
@@ -214,6 +218,8 @@ async function addEvent() {
   }
 }
 
+// iterates in events db (object), returns each event 
+// and injects each event inside events-container
 async function events() {
   const events = await getEvents();
   const eventsContainer = document.getElementById("events-container")
@@ -225,12 +231,13 @@ async function events() {
             <td>${event.capacity}</td>
             <td>${event.assistants.length}/${event.capacity}</td>
             <td>${event.date}</td>
-            <td><button class="btn btn-danger mt-2" onclick="deleteEvent('${event.id}')">Delete</button>
-            <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#miModal2" onclick="loadEvent('${event.id}')">Update</button></td>
+            <td><button class="btn btn-danger mt-2" onclick="deleteEvent('${event.id}')"><i class="fa-solid fa-trash"></i></button>
+            <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#miModal2" onclick="loadEvent('${event.id}')"><i class="fa-solid fa-pen"></i></button></td>
         `
   });
 }
 
+// method HTTP DELETE to delete from events a determined event searched by id 
 async function deleteEvent(id) {
   const confirmDelete = confirm(
     "Are you sure you want to delete this event?"
@@ -256,6 +263,7 @@ async function deleteEvent(id) {
 }
 window.deleteEvent = deleteEvent;
 
+//load event searches the event by id 
 async function loadEvent(id) {
   const res = await fetch(`http://localhost:3000/events/${id}`);
   const data = await res.json();
@@ -268,6 +276,7 @@ async function loadEvent(id) {
 
 window.loadEvent = loadEvent;
 
+// method HTTP PATCH to update the information of an event, could be one or multiple attributes
 async function updateEvent() {
   const id = document.getElementById("update-id").value;
   const title = document.getElementById("update-title").value;

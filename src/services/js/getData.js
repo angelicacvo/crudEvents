@@ -1,4 +1,4 @@
-
+// http request to get data from users and events URL with fetch method
 
 export async function getUsers() {
     try {

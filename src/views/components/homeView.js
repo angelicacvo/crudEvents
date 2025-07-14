@@ -2,8 +2,11 @@ import privateNavbar from "./privateNavbar.js";
 import { redirectIfNotLoggedIn } from "../../utils/routerGuard.js";
 import { getEvents } from "../../services/js/getData.js";
 
+// returns a table with innerHTML content I want to inject in content (index.html)
+// includes validations of data entered
+// Set time out to wait until the DOM loads
+// Includes router guard
 export default function homeView() {
-  // botón para salir de la sesión
   setTimeout(() => {
     const logoutBtn = document.getElementById("logoutBtn");
     if (logoutBtn) {
@@ -20,7 +23,7 @@ export default function homeView() {
     ${privateNavbar()}
     
     <section class="container mt-4">
-      <h1>Bienvenido a Crudevents</h1>
+      <h1>Welcome to Crudevents</h1>
     </section>
     <section class="avaiable_events">
         <h2>Avaiable events</h2>
@@ -55,6 +58,8 @@ export default function homeView() {
   `;
 }
 
+// iterates in events db (object), returns each event 
+// and injects each event inside events-container
 async function events() {
   const events = await getEvents();
   const eventsContainer = document.getElementById("events-container");
@@ -77,12 +82,14 @@ async function events() {
             <td>${event.description}</td>
             <td>${event.assistants.length}/${event.capacity}</td>
             <td>${event.date}</td>
-            <td><button class="btn btn-danger mt-2" onclick="assistEvent('${event.id}', ${event.capacity})">Assist</button></td>
+            <td><button class="btn btn-danger mt-2" onclick="assistEvent('${event.id}',${event.capacity})">Assist</button></td>
             </tr>
         `;
   });
 }
 
+//functionality to button Assist, confirms if the users is sure to assist
+//makes a patch to events to update the array assistants[] and appends a new user
 async function assistEvent(id, capacity) {
   const events = await getEvents();
   const confirmAssistance = confirm("Are you sure you want to assist?");
@@ -130,6 +137,8 @@ async function assistEvent(id, capacity) {
 
 window.assistEvent = assistEvent;
 
+// adds content to the enrolled table data when the user clicks the button Assist
+// to the user can see each event he confirmed his assitance
 async function enrolledEvents() {
   const events = await getEvents();
   const confirmedEvents = document.getElementById("confirmed-events");

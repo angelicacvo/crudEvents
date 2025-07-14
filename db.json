@@ -15,18 +15,46 @@
       "username": "a",
       "password": "123",
       "role": "user"
+    },
+    {
+      "id": "1969",
+      "fullName": "angel",
+      "email": "angel@gmail.com",
+      "username": "angel",
+      "password": "123",
+      "role": "user"
     }
   ],
   "events": [
     {
       "id": "b7da",
-      "title": "dasdasdasdasda",
-      "description": "asasaasdas",
+      "title": "Mercurio",
+      "description": "Retogrado",
       "date": "2025-03-05",
       "capacity": "2",
       "assistants": [
-        "angelica@gmail.com"
+        "angelica@gmail.com",
+        "angel@gmail.com"
       ]
+    },
+    {
+      "id": "b7da",
+      "title": "Luna",
+      "description": "llena",
+      "date": "2025-03-05",
+      "capacity": "2",
+      "assistants": [
+        "angelica@gmail.com",
+        "angel@gmail.com"
+      ]
+    },
+    {
+      "id": "3c52",
+      "title": "Jupiter",
+      "description": "Marte",
+      "date": "2026-06-12",
+      "capacity": "2",
+      "assistants": []
     }
   ]
 }

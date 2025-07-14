@@ -1,12 +1,9 @@
-// guardian de la ruta, verifica que esté autenticado en true
-// nueva
-
-// Verifica si hay una sesión autenticada activa
+// verifies if the user verification is true
 export function isAuthenticated() {
     return sessionStorage.getItem("auth") === "true";
 }
 
-// Redirige al login si no está autenticado
+// redirects to login if the user is not autenticated
 export function redirectIfNotLoggedIn() {
     const isAuth = isAuthenticated();
 
@@ -18,13 +15,12 @@ export function redirectIfNotLoggedIn() {
     return true;
 }
 
-// Obtiene los datos del usuario desde sessionStorage
 export function getUser() {
     const user = sessionStorage.getItem("user");
     return user ? JSON.parse(user) : null;
 }
 
-// Protege rutas solo para administradores
+// route protection only for admins
 export function protectAdminRoute() {
     const auth = isAuthenticated();
     const user = getUser();
@@ -43,7 +39,7 @@ export function protectAdminRoute() {
     return true;
 }
 
-// 🔒 Evita que un usuario autenticado entre a login o register
+// route protection to login and register if the user is autenticated already
 export function redirectIfLoggedIn() {
     const isAuth = isAuthenticated();
     const user = getUser();

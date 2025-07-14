@@ -2,13 +2,16 @@ import { getUsers } from "../../services/js/getData.js";
 import publicNavbar from "./publicNavbar.js"
 import { redirectIfLoggedIn } from "../../utils/routerGuard.js";
 
+
+// Returns a login form which the user will fill with his data 
+// when he is already registered
+// Set time out to wait until the DOM loads
+// Includes router guard
 export default function loginView() {
-  // para que espere hasta que recargue el dom
   setTimeout(() => {
     const loginButton = document.getElementById("loginButton")
     if (loginButton) {
       loginButton.addEventListener("click", async (e) => {
-        // para prevenir que se recargue la pagina
         e.preventDefault();
         login();
       })
@@ -52,12 +55,13 @@ export default function loginView() {
       </section>`
 }
 
+// Verifies if the user data entered via input matches with the database data
+// Uses session storage to set user data and auth as true so the user can login successfully
+// redirects the user to the page according the role
 async function login() {
   const email = document.getElementById("email").value.trim().toLowerCase();
   const password = document.getElementById("password").value;
   const users = await getUsers()
-  // se hace una verificacion de que coincida lo que encuentra en la bd con username o email 
-  // con lo que ingresas en el input del html
   const exists = users.find(
     (user) => user.email === email && user.password === password ||
       user.username === email && user.password === password
@@ -67,7 +71,6 @@ async function login() {
     alert("Fill all fields")
   } else if (exists) {
     alert(`Welcome, ${exists.fullName}`)
-    // para que el objeto del session storage se lea
     const registeredUserData = {
       "email": exists.email,
       "username": exists.username,
@@ -80,11 +83,7 @@ async function login() {
     else {
       location.hash = "/home";
     }
-    // guardar en la sessionStorage la info de login de usuario
-    // si es exitoso se pone en true el auth
     sessionStorage.setItem("auth", "true")
-    // guardar en user un objeto con los datos que contiene exists ((user) => user.email === email || user.username === email)
-    // se agrega el registeredUserData a la sessionStorage para que se lean los valores y pueda utilizarlos en el dom
     sessionStorage.setItem("user", JSON.stringify(registeredUserData))
   } else {
     alert("Wrong data. Please enter the right data")

@@ -1,11 +1,11 @@
-
+// nav bar only administrator view
 export default function adminNavbar() {
     const user = JSON.parse(sessionStorage.getItem("user")) || { username: "Guest" };
 
     return `
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#/home">Crudevents</a>
+            <a class="navbar-brand" href="#/home"> <i class="fa-solid fa-calendar"></i> Crudevents</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -15,6 +15,7 @@ export default function adminNavbar() {
                         <a class="nav-link active" aria-current="page" href="#/admin">Manage</a>
                     </li>
                 </ul>
+                <span class="navbar-text me-3">Welcome, ${user.username}</span>
                 <button class="btn btn-outline-danger" id="logoutBtn">Logout</button>
             </div>
         </div>
